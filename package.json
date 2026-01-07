@@ -1,0 +1,43 @@
+{
+  "name": "sql-mig8-cli",
+  "description": "A CLI tool for running SQL migrations",
+  "author": {
+    "name": "Ernest Irabor",
+    "email": "irabeny89@gmail.com",
+    "url": "https://irabeny89.github.io/portfolio"
+  },
+  "version": "0.0.1",
+  "license": "MIT",
+  "bin": {
+    "sqlmig8": "src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "scripts": {
+    "setup:pre-commit": "echo '#!/bin/sh\nset -e\ncog verify --file $1' >> .git/hooks/pre-commit",
+    "version:next": "cog bump --dry-run --auto",
+    "version:current": "cog get-version",
+    "install:hooks": "cog install-hook --all",
+    "start": "bun run src/index.ts",
+    "build": "bun build src/index.ts --compile --minify --sourcemap --outfile dist/sqlmig8",
+    "build:linux-x64": "bun build src/index.ts --compile --minify --sourcemap --outfile dist/sqlmig8-linux-x64 --target=bun-linux-x64",
+    "build:linux-arm64": "bun build src/index.ts --compile --minify --sourcemap --outfile dist/sqlmig8-linux-arm64 --target=bun-linux-arm64",
+    "build:macos-x64": "bun build src/index.ts --compile --minify --sourcemap --outfile dist/sqlmig8-darwin-x64 --target=bun-darwin-x64",
+    "build:macos-arm64": "bun build src/index.ts --compile --minify --sourcemap --outfile dist/sqlmig8-darwin-arm64 --target=bun-darwin-arm64",
+    "build:windows-x64": "bun build src/index.ts --compile --minify --sourcemap --outfile dist/sqlmig8-windows-x64.exe --target=bun-windows-x64",
+    "lint": "bunx tsc --noEmit",
+    "test": "bun test"
+  },
+  "cspell": {
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+      "zstd"
+    ],
+    "ignoreWords": [],
+    "import": []
+  }
+}
