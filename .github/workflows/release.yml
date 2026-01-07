@@ -1,0 +1,80 @@
+name: CI & Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    # Grant permissions to write tags, releases, and updated package.json
+    permissions:
+      contents: write
+      pull-requests: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to analyze all commits for versioning
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Lint & Test
+        run: |
+          bun run lint
+          bun run test
+      - name: Setup Git Identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump Version & Generate Changelog
+        id: bump
+        run: |
+          # Use standard-version or 'commit-and-tag-version' to:
+          # 1. Check conventional commits
+          # 2. Bump package.json version
+          # 3. Update CHANGELOG.md
+          # 4. Create a local git tag
+          bunx commit-and-tag-version
+
+          # Extract the new version for later steps
+          echo "NEW_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Push Version Update & Tag
+        run: git push --follow-tags origin main
+
+      - name: Build For All Platforms
+        run: |
+          bun run build:linux-x64
+          bun run build:linux-arm64
+          bun run build:macos-x64
+          bun run build:macos-arm64
+          bun run build:windows-x64
+
+      - name: Compress Built Files
+        run: |
+          tar --zstd -cf sqlmig8-linux-x64.tar.zst -C dist sqlmig8-linux-x64
+          tar --zstd -cf sqlmig8-linux-arm64.tar.zst -C dist sqlmig8-linux-arm64
+          tar --zstd -cf sqlmig8-macos-x64.tar.zst -C dist sqlmig8-darwin-x64
+          tar --zstd -cf sqlmig8-macos-arm64.tar.zst -C dist sqlmig8-darwin-arm64
+          zip sqlmig8-windows-x64.exe.zip dist/sqlmig8-windows-x64.exe
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.bump.outputs.NEW_VERSION }}
+          # Path to your built files/assets (e.g., dist/* or a binary)
+          files: ./{*.tar.zst,*.exe.zip}
+          # Uses the notes generated in CHANGELOG.md automatically
+          body_path: CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
