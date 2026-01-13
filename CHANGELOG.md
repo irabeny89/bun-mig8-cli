@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.1](https://github.com/irabeny89/bun-mig8-cli/compare/v0.1.0...v0.1.1) (2026-01-13)
+
+
+### Bug Fixes
+
+* remove argument check on dir command ([40cebec](https://github.com/irabeny89/bun-mig8-cli/commit/40cebec3e7ee9abfcbec8eba7c215ad4cce755ae))
+
 ## [0.1.0](https://github.com/irabeny89/bun-mig8-cli/compare/v0.0.2...v0.1.0) (2026-01-13)
 
 
