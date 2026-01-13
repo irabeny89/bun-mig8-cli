@@ -48,7 +48,7 @@ The CLI relies on environment variables for configuration. Create a `.env` file 
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `DATABASE_URL` | The connection string for your SQL (PostgreSQL, MySQL or SQLite) database. | `postgres://user:password@localhost:5432/mydb` |
-| `MIG_DIR_ABSOLUTE_PATH` | The **absolute path** to your migrations directory. | `/Users/username/project/migrations` |
+| `MIG_FOLDER` | The **relative path** (from root directory) to your migrations directory. | `src/migrations` |
 
 ## Usage
 

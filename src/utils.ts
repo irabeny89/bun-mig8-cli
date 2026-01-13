@@ -3,11 +3,17 @@ import { version, bin } from "../package.json";
 const wordSeparator = "-";
 const binaryName = Object.keys(bin)[0];
 let db: Bun.SQL | null = null;
+const migFolder = process.env.MIG_FOLDER;
 
 /**
  * Prints help message.
  */
 export function printHelp() {
+    console.log(`---Help---`);
+    console.log("NOTE: SET THE DATABASE_URL AND MIG_FOLDER ENVIRONMENT VARIABLES");
+    console.log(`MIG_FOLDER: The relative path (from root directory) to your migrations directory. \n\tE.g: src/migrations`);
+    console.log(`DATABASE_URL: The connection string for your SQL (PostgreSQL, MySQL or SQLite) database. \n\tE.g: postgres://user:password@localhost:5432/mydb \n\tE.g: mysql://user:password@localhost:3306/mydb \n\tE.g: sqlite://path/to/database.db\n`);
+    console.log(`Go to Bun.js docs for more info about environment variables - https://bun.com/docs/runtime/environment-variables\n`);
     console.log(`Usage: ${binaryName} [command]`);
     console.log(`Commands: help, info, create, migrate, dir, check`);
     console.log(`Example: ${binaryName} help`);
@@ -16,6 +22,7 @@ export function printHelp() {
     console.log(`Example: ${binaryName} create <description> [description ...]`);
     console.log(`Example: ${binaryName} migrate <file> [file ...]`);
     console.log(`Example: ${binaryName} dir`);
+    console.log(`---End Help---`);
 }
 /**
  * Prints information about the current environment.
@@ -31,7 +38,7 @@ export function printInfo() {
     console.log(`Memory: ${process.memoryUsage().rss / 1024 / 1024} MB`);
     console.log(`CPU Usage: ${process.cpuUsage().user / 1000000} ms`);
     console.log(`---Migration Info---`);
-    console.log(`Migration directory: ${process.env.MIG_DIR_ABSOLUTE_PATH}`);
+    console.log(`Migration directory: ${migFolder}`);
     console.log(`---Configuration---`);
     console.log(`Word separator: ${wordSeparator}`);
 }
