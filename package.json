@@ -6,7 +6,7 @@
     "email": "irabeny89@gmail.com",
     "url": "https://irabeny89.github.io/portfolio"
   },
-  "version": "0.0.2",
+  "version": "0.1.0",
   "license": "MIT",
   "bin": {
     "sqlmig8": "src/index.ts"
