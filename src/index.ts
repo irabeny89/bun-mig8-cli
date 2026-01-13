@@ -66,11 +66,6 @@ if (command === "migrate") {
 }
 // MARK: dir
 if (command === "dir") {
-	if (args.length === 0) {
-		log("no migrations to run", "ERROR");
-		printHelp();
-		process.exit(1);
-	}
 	log("running all migrations in directory")
 	await migrateDirectory()
 		.catch((e) => {
