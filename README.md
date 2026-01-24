@@ -2,6 +2,21 @@
 
 A lightweight, fast CLI tool for managing and running SQL migrations, built with [Bun](https://bun.sh/).
 
+> This is a stateless CLI tool, meaning it does not track which migrations have already been run.
+>
+> Ensure Bun is installed on your system - <https://bun.sh/docs/installation>
+>
+> Ensure the migration scripts are written in SQL and are idempotent.
+
+-- Example of an idempotent SQL migration script
+
+```sql
+CREATE TABLE IF NOT EXISTS users (
+    id INT PRIMARY KEY,
+    name VARCHAR(255)
+);
+```
+
 ## Features
 
 - 🚀 **Fast execution** powered by Bun.
@@ -92,7 +107,7 @@ sqlmig8 check
 
 #### `create <description...>`
 
-Creates a new migration file with a timestamp prefix in the configured `MIG_DIR_ABSOLUTE_PATH`.
+Creates a new migration file with a timestamp prefix in the configured `MIG_FOLDER`.
 
 ```bash
 # Creates a file like: 1704512345678-create-users-table.sql
